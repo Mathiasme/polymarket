@@ -261,6 +261,18 @@ type Pagination struct {
 	TotalResults int  `json:"totalResults"`
 }
 
+// LiveVolume represents live volume data for an event
+type LiveVolume struct {
+	Total   float64        `json:"total"`
+	Markets []MarketVolume `json:"markets"`
+}
+
+// MarketVolume represents volume data for a specific market
+type MarketVolume struct {
+	Market string  `json:"market"` // Market address/ID
+	Value  float64 `json:"value"`  // Volume value
+}
+
 // APIError represents an error response from the Polymarket API
 type APIError struct {
 	Code    int    `json:"code"`

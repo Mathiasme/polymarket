@@ -15,6 +15,9 @@ const (
 	// DefaultBaseURL is the default Polymarket API base URL
 	DefaultBaseURL = "https://gamma-api.polymarket.com"
 	
+	// DataAPIBaseURL is the Polymarket Data API base URL
+	DataAPIBaseURL = "https://data-api.polymarket.com"
+	
 	// DefaultTimeout is the default HTTP client timeout
 	DefaultTimeout = 30 * time.Second
 )
@@ -56,8 +59,13 @@ func (c *Client) SetTimeout(timeout time.Duration) {
 
 // makeRequest performs an HTTP request and returns the response body
 func (c *Client) makeRequest(method, endpoint string, params url.Values) ([]byte, error) {
+	return c.makeRequestWithBaseURL(c.baseURL, method, endpoint, params)
+}
+
+// makeRequestWithBaseURL performs an HTTP request with a custom base URL
+func (c *Client) makeRequestWithBaseURL(baseURL, method, endpoint string, params url.Values) ([]byte, error) {
 	// Construct full URL
-	fullURL := c.baseURL + endpoint
+	fullURL := baseURL + endpoint
 	if len(params) > 0 {
 		fullURL += "?" + params.Encode()
 	}
