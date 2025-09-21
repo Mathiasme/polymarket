@@ -15,7 +15,7 @@ A Go client library for interacting with the [Polymarket](https://polymarket.com
 ## Installation
 
 ```bash
-go get github.com/your-username/polymarket-go
+go get github.com/mathiasme/polymarket-go
 ```
 
 ## Quick Start
