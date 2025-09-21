@@ -45,7 +45,7 @@ func (c *Client) GetEventWithParams(eventID string, params *GetEventParams) (*Ev
 // GetEventBySlug retrieves a specific event by its slug
 func (c *Client) GetEventBySlug(slug string) (*Event, error) {
 	params := &EventsParams{
-		Slug:  slug,
+		Slug:  []string{slug},
 		Limit: 1,
 	}
 	
