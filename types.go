@@ -18,7 +18,7 @@ type Market struct {
 	
 	// Market type and outcomes
 	MarketType    string     `json:"marketType"`
-	Outcomes      []string   `json:"outcomes"`
+	Outcomes      string     `json:"outcomes"`
 	
 	// Trading information
 	Volume        string `json:"volume"`
