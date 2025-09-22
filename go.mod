@@ -1,3 +1,3 @@
-module github.com/mathiasme/Polymarket
+module github.com/mathiasme/polymarket
 
 go 1.21
