@@ -79,7 +79,7 @@ type Event struct {
 
 	// Related data
 	Markets    []Market   `json:"markets"`
-	Series     *Series    `json:"series"`
+	Series     []Series   `json:"series"`
 	Categories []Category `json:"categories"`
 	Tags       []Tag      `json:"tags"`
 
