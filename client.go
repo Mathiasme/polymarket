@@ -13,10 +13,10 @@ import (
 const (
 	// DefaultBaseURL is the default Polymarket API base URL
 	DefaultBaseURL = "https://gamma-api.polymarket.com"
-	
+
 	// DataAPIBaseURL is the Polymarket Data API base URL
 	DataAPIBaseURL = "https://data-api.polymarket.com"
-	
+
 	// DefaultTimeout is the default HTTP client timeout
 	DefaultTimeout = 30 * time.Second
 )
@@ -42,7 +42,7 @@ func NewClientWithOptions(baseURL string, timeout time.Duration) *Client {
 	if baseURL == "" {
 		baseURL = DefaultBaseURL
 	}
-	
+
 	return &Client{
 		baseURL: baseURL,
 		httpClient: &http.Client{
@@ -68,30 +68,30 @@ func (c *Client) makeRequestWithBaseURL(baseURL, method, endpoint string, params
 	if len(params) > 0 {
 		fullURL += "?" + params.Encode()
 	}
-	
+
 	// Create request
 	req, err := http.NewRequest(method, fullURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	
+
 	// Set headers
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", "polymarket-go-client/1.0")
-	
+
 	// Make request
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %w", err)
 	}
 	defer resp.Body.Close()
-	
+
 	// Read response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
-	
+
 	// Check for API errors
 	if resp.StatusCode != http.StatusOK {
 		var apiErr APIError
@@ -101,14 +101,14 @@ func (c *Client) makeRequestWithBaseURL(baseURL, method, endpoint string, params
 		apiErr.Code = resp.StatusCode
 		return nil, &apiErr
 	}
-	
+
 	return body, nil
 }
 
 // buildParams converts struct parameters to url.Values
 func buildParams(params interface{}) url.Values {
 	values := url.Values{}
-	
+
 	switch p := params.(type) {
 	case *MarketsParams:
 		if p == nil {
@@ -123,9 +123,7 @@ func buildParams(params interface{}) url.Values {
 		if p.Order != "" {
 			values.Add("order", p.Order)
 		}
-		if p.Ascending {
-			values.Add("ascending", "true")
-		}
+		values.Add("ascending", strconv.FormatBool(p.Ascending))
 		if p.Active != nil {
 			values.Add("active", strconv.FormatBool(*p.Active))
 		}
@@ -144,7 +142,7 @@ func buildParams(params interface{}) url.Values {
 		if p.TagID != "" {
 			values.Add("tag_id", p.TagID)
 		}
-		
+
 	case *EventsParams:
 		if p == nil {
 			return values
@@ -156,15 +154,13 @@ func buildParams(params interface{}) url.Values {
 		if p.Offset > 0 {
 			values.Add("offset", strconv.Itoa(p.Offset))
 		}
-		
+
 		// Sorting
 		if p.Order != "" {
 			values.Add("order", p.Order)
 		}
-		if p.Ascending {
-			values.Add("ascending", "true")
-		}
-		
+		values.Add("ascending", strconv.FormatBool(p.Ascending))
+
 		// Basic filters
 		if len(p.ID) > 0 {
 			for _, id := range p.ID {
@@ -185,7 +181,7 @@ func buildParams(params interface{}) url.Values {
 		if p.Archived != nil {
 			values.Add("archived", strconv.FormatBool(*p.Archived))
 		}
-		
+
 		// Advanced filters
 		if p.TagID != nil {
 			values.Add("tag_id", strconv.Itoa(*p.TagID))
@@ -207,7 +203,7 @@ func buildParams(params interface{}) url.Values {
 		if p.Recurrence != "" {
 			values.Add("recurrence", p.Recurrence)
 		}
-		
+
 		// Date filters
 		if p.StartDateMin != nil {
 			values.Add("start_date_min", p.StartDateMin.Format(time.RFC3339))
@@ -221,7 +217,7 @@ func buildParams(params interface{}) url.Values {
 		if p.EndDateMax != nil {
 			values.Add("end_date_max", p.EndDateMax.Format(time.RFC3339))
 		}
-		
+
 	case *GetEventParams:
 		if p == nil {
 			return values
@@ -232,7 +228,7 @@ func buildParams(params interface{}) url.Values {
 		if p.IncludeTemplate != nil {
 			values.Add("include_template", strconv.FormatBool(*p.IncludeTemplate))
 		}
-		
+
 	case *GetMarketParams:
 		if p == nil {
 			return values
@@ -240,7 +236,7 @@ func buildParams(params interface{}) url.Values {
 		if p.IncludeTag != nil {
 			values.Add("include_tag", strconv.FormatBool(*p.IncludeTag))
 		}
-		
+
 	case *CommentsParams:
 		if p == nil {
 			return values
@@ -252,15 +248,13 @@ func buildParams(params interface{}) url.Values {
 		if p.Offset > 0 {
 			values.Add("offset", strconv.Itoa(p.Offset))
 		}
-		
+
 		// Sorting
 		if p.Order != "" {
 			values.Add("order", p.Order)
 		}
-		if p.Ascending {
-			values.Add("ascending", "true")
-		}
-		
+		values.Add("ascending", strconv.FormatBool(p.Ascending))
+
 		// Filters
 		if p.ParentEntityType != "" {
 			values.Add("parent_entity_type", p.ParentEntityType)
@@ -274,7 +268,7 @@ func buildParams(params interface{}) url.Values {
 		if p.HoldersOnly != nil {
 			values.Add("holders_only", strconv.FormatBool(*p.HoldersOnly))
 		}
-		
+
 	case *SearchParams:
 		if p == nil {
 			return values
@@ -283,7 +277,7 @@ func buildParams(params interface{}) url.Values {
 		if p.Q != "" {
 			values.Add("q", p.Q)
 		}
-		
+
 		// Pagination
 		if p.Page > 0 {
 			values.Add("page", strconv.Itoa(p.Page))
@@ -291,15 +285,13 @@ func buildParams(params interface{}) url.Values {
 		if p.LimitPerType > 0 {
 			values.Add("limit_per_type", strconv.Itoa(p.LimitPerType))
 		}
-		
+
 		// Sorting
 		if p.Sort != "" {
 			values.Add("sort", p.Sort)
 		}
-		if p.Ascending != nil {
-			values.Add("ascending", strconv.FormatBool(*p.Ascending))
-		}
-		
+		values.Add("ascending", strconv.FormatBool(p.Ascending))
+
 		// Filters and options
 		if p.Cache != nil {
 			values.Add("cache", strconv.FormatBool(*p.Cache))
@@ -333,6 +325,6 @@ func buildParams(params interface{}) url.Values {
 			values.Add("optimized", strconv.FormatBool(*p.Optimized))
 		}
 	}
-	
+
 	return values
 }

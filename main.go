@@ -19,6 +19,7 @@ func Test() {
 		Ascending: true,
 		Active:    boolPtr(true),
 	}
+	log.Println("Raw : ", marketsParams.Ascending)
 
 	markets, err := client.GetMarkets(marketsParams)
 	if err != nil {

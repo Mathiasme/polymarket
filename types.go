@@ -17,8 +17,9 @@ type Market struct {
 	MarketMakerAddress string     `json:"marketMakerAddress"`
 
 	// Market type and outcomes
-	MarketType string `json:"marketType"`
-	Outcomes   string `json:"outcomes"`
+	MarketType     string `json:"marketType"`
+	Outcomes       string `json:"outcomes"`
+	OutcomesPrices string `json:"outcomePrices"`
 
 	// Trading information
 	Volume       string  `json:"volume"`
@@ -233,7 +234,7 @@ type SearchParams struct {
 
 	// Sorting
 	Sort      string `json:"sort,omitempty"`
-	Ascending *bool  `json:"ascending,omitempty"`
+	Ascending bool   `json:"ascending,omitempty"`
 
 	// Filters and options
 	Cache             *bool    `json:"cache,omitempty"`
